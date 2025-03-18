@@ -1,14 +1,13 @@
 import React from 'react'
 import { records } from "../tables/data";
 import { Link } from 'react-router-dom';
-import { dE } from '@fullcalendar/core/internal-common';
 import { PageBreadcrumb } from '../../components';
 
 const WorkPlace = () => {
   return (
     <>
       <PageBreadcrumb title='Work Place' name='WorkPlace' breadCrumbItems={['Menu', 'Work Place']} />
-      
+
       <div className="card">
         <div className="card-header">
           <div className="flex justify-between items-center">
