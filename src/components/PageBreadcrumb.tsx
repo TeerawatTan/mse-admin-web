@@ -12,7 +12,7 @@ const PageBreadcrumb = ({ breadCrumbItems, title, name, children }: PageTitlePro
   return (
     <>
       <Helmet>
-        <title>{title} | Konrix - Responsive Tailwind Admin Dashboard</title>
+        <title>{title} | Admin Management</title>
       </Helmet>
       {name && <div className="flex justify-between items-center mb-6">
         <div className="flex gap-3">

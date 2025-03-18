@@ -31,7 +31,6 @@
     "axios": "0.21.1",
     "axios-mock-adapter": "1.19.0",
     "feather-icons-react": "^0.6.2",
-    "google-maps-react": "^2.0.6",
     "gridjs": "^5.1.0",
     "gridjs-react": "5.1.0",
     "jsvectormap": "1.3.2",
