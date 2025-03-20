@@ -35,6 +35,8 @@ const Agency = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{record.age}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{record.address}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                            <Link className="text-primary hover:text-sky-700" to={{ pathname: `/agency/${record.id}` }}>Edit</Link>
+                            <span> | </span>
                             <Link className="text-primary hover:text-sky-700" to="#">Delete</Link>
                           </td>
                         </tr>

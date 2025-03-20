@@ -21,6 +21,7 @@ const Workplace = React.lazy(() => import("../pages/workplace-setting/"));
 
 // Agency
 const Agency = React.lazy(() => import("../pages/agency-setting/"));
+const AgencyEdit = React.lazy(() => import("../pages/agency-setting/[id]"));
 
 // JobType
 const JobType = React.lazy(() => import("../pages/jobtype-setting/"));
@@ -77,6 +78,12 @@ const dashboardRoutes: RoutesProps = {
       path: '/agency',
       name: "Agency",
       element: <Agency />,
+      route: PrivateRoute,
+    },
+    {
+      path: 'agency/:id',
+      name: "agency-edit",
+      element: <AgencyEdit />,
       route: PrivateRoute,
     },
     {
