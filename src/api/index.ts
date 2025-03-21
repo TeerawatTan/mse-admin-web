@@ -71,14 +71,6 @@ mainAxios.interceptors.response.use(
       cancelTokens.delete(requestKey);
     }
 
-    originalRequest?.headers.Authorization &&
-      mainAxios.post("/api/error_hook", {
-        api_url: originalRequest.baseURL + originalRequest.url,
-        method: originalRequest.method.toLocaleUpperCase(),
-        error_code: error.response?.status,
-        error_message: error.message,
-      });
-
     if (originalRequest?.url === "/api/login") {
       return Promise.reject(error instanceof Error ? error : new Error(error));
     }

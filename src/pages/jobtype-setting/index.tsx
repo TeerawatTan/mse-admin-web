@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import PageBreadcrumb from "../../components/PageBreadcrumb";
-
+import api from "../../api";
 interface JobType {
   id: number;
   name: string;
@@ -12,8 +12,6 @@ const JobTypePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobType | null>(null);
   const [jobName, setJobName] = useState("");
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0TE8wNU4wVGNBQWtCUi9jQjMvZHpzellJRlMxR2NEd2szSUY0VHlWNGUwR2xRVHRDTkNmV2c9PSIsImp0aSI6IjBmNTI3MzdjLWVjZDItNDkyZS05MTBkLTM2NDc2YTAwY2RiNCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4yQHRlc3QuY29tIiwiZXhwIjoxNzQyNTMwMjUwLCJpc3MiOiJtc2UgaGVhbHRoIGNoZWNrdXAiLCJhdWQiOiJtc2UgaGVhbHRoIGNoZWNrdXAifQ._o19D-RfVzWzVpTvzEl2dLSk-6454GvxVmm_Az5eSGs"; // ดึง Token จาก Local Storage
 
   useEffect(() => {
     fetchJobTypes();
@@ -33,19 +31,11 @@ const JobTypePage: React.FC = () => {
   };
   const addJobType = async (name: string) => {
     try {
-      const response = await fetch("/api/jobTypes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name }),
-      });
-
-      if (!response.ok) {
+      const response = await api.post(`/api/jobTypes`, { name })
+      if (!response.data) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
-      const newJobType = await response.json();
+      const newJobType = await response.data();
       setJobTypes((prevJobTypes) => [...prevJobTypes, newJobType]);
       await fetchJobTypes();
     } catch (error) {
@@ -85,17 +75,10 @@ const JobTypePage: React.FC = () => {
     if (!editingJob) return;
 
     try {
-      const response = await fetch(`/api/jobTypes/${editingJob.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name: jobName }),
-      });
+      const response = await api.patch(`/api/jobTypes/${editingJob.id}`, { name: jobName })
 
-      if (response.ok) {
-        const updatedJob = await response.json();
+      if (response.data) {
+        const updatedJob = response.data;
 
         setJobTypes((prev) =>
           prev.map((jt) =>
@@ -106,7 +89,7 @@ const JobTypePage: React.FC = () => {
         Swal.fire("Updated!", "The job type has been updated.", "success");
         closeModal();
       } else {
-        const errorData = await response.json();
+        const errorData = await response.data;
         Swal.fire(
           "Error!",
           errorData.message || "Failed to update job type.",
@@ -131,18 +114,12 @@ const JobTypePage: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await fetch(`/api/jobTypes/${id}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (res.ok) {
+          const res = await api.delete(`/api/jobTypes/${id}`)
+          if (res.data) {
             setJobTypes(jobTypes.filter((jt) => jt.id !== id));
             Swal.fire("Deleted!", "The job type has been deleted.", "success");
           } else {
-            const errorData = await res.json();
+            const errorData = await res.data;
             Swal.fire(
               "Error!",
               errorData.message || "Failed to delete job type.",
