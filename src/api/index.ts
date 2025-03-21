@@ -8,9 +8,7 @@ const cancelTokens = new Map();
 // Create an axios instance with the specified base URL and headers
 const mainAxios = axios.create({
   baseURL:
-    process.env.NODE_ENV === "production"
-      ? process.env.REACT_APP_API_PROD_URL
-      : process.env.REACT_APP_API_DEV_URL,
+    import.meta.env.PROD ? import.meta.env.VITE_APP_API_URL : import.meta.env.VITE_APP_API_DEV_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
