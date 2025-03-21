@@ -19,8 +19,7 @@ const JobTypePage: React.FC = () => {
 
   const fetchJobTypes = async () => {
     try {
-      const response = await api.get(`/api/jobTypes`)
-
+      const response = await api.get(`/MasterJobType`)
       if (!response.data) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
@@ -32,7 +31,7 @@ const JobTypePage: React.FC = () => {
   };
   const addJobType = async (name: string) => {
     try {
-      const response = await api.post(`/api/jobTypes`, { name })
+      const response = await api.post(`/MasterJobType`, { name })
       if (!response.data) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
@@ -76,7 +75,7 @@ const JobTypePage: React.FC = () => {
     if (!editingJob) return;
 
     try {
-      const response = await api.patch(`/api/jobTypes/${editingJob.id}`, { name: jobName })
+      const response = await api.patch(`/MasterJobType/${editingJob.id}`, { name: jobName })
 
       if (response.data) {
         const updatedJob = response.data;
@@ -115,7 +114,7 @@ const JobTypePage: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await api.delete(`/api/jobTypes/${id}`)
+          const res = await api.delete(`/MasterJobType/${id}`)
           if (res.data) {
             setJobTypes(jobTypes.filter((jt) => jt.id !== id));
             Swal.fire("Deleted!", "The job type has been deleted.", "success");

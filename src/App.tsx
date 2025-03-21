@@ -10,9 +10,6 @@ import "./assets/scss/app.scss";
 import "./assets/scss/icons.scss";
 import { setAuthorizationToken } from './api';
 
-// configure fake backend
-configureFakeBackend()
-
 const App = () => {
 
   const token =
