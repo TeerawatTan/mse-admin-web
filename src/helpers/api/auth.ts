@@ -1,26 +1,25 @@
-import { APICore } from "./apiCore";
+import api from "../../api";
 
-const api = new APICore();
 
 // account
 function login(params: { username: string; password: string }) {
-  const baseUrl = "/login/";
-  return api.create(`${baseUrl}`, params);
+  const baseUrl = "/Auth/SignIn";
+  return api.post(`${baseUrl}`, params);
 }
 
 function logout() {
   const baseUrl = "/logout/";
-  return api.create(`${baseUrl}`, {});
+  return api.post(`${baseUrl}`, {});
 }
 
 function signup(params: { fullname: string; email: string; password: string }) {
   const baseUrl = "/register/";
-  return api.create(`${baseUrl}`, params);
+  return api.post(`${baseUrl}`, params);
 }
 
 function forgotPassword(params: { username: string }) {
   const baseUrl = "/forgot-password/";
-  return api.create(`${baseUrl}`, params);
+  return api.post(`${baseUrl}`, params);
 }
 
 export { login, logout, signup, forgotPassword };

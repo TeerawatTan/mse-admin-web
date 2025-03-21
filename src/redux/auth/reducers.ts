@@ -1,13 +1,8 @@
-// apicore
-import { APICore } from "../../helpers/api/apiCore";
-
 // constants
 import { AuthActionTypes } from "./constants";
 
-const api = new APICore();
-
 const INIT_STATE = {
-  user: api.getLoggedInUser(),
+  user: "",
   loading: false,
 };
 

@@ -10,14 +10,14 @@ import DefaultLayout from "../layouts/Default";
 import VerticalLayout from "../layouts/Vertical";
 
 import { authProtectedFlattenRoutes, publicProtectedFlattenRoutes } from ".";
-import { APICore } from "../helpers/api/apiCore";
+import api from "../api";
 
 const AllRoutes = (props: RouteProps) => {
   const { Layout } = useSelector((state: RootState) => ({
     Layout: state.Layout,
   }));
 
-  const api = new APICore();
+  const isAuthenticated = localStorage.getItem("accessToken");
 
   return (
     <React.Fragment>
@@ -42,12 +42,9 @@ const AllRoutes = (props: RouteProps) => {
             <Route
               path={route.path}
               element={
-                api.isUserAuthenticated() === false ? (
+                !isAuthenticated ? (
                   <Navigate
-                    to={{
-                      pathname: "/auth/login",
-                      search: "next=" + route.path,
-                    }}
+                    to={"/auth/login"}
                   />
                 ) : (
                   <VerticalLayout {...props}>{route.element}</VerticalLayout>

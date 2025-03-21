@@ -1,8 +1,7 @@
 import { all, fork, put, takeEvery, call } from "redux-saga/effects";
 import { SagaIterator } from "@redux-saga/core";
 
-// apicore
-import { APICore, setAuthorization } from "../../helpers/api/apiCore";
+import { setAuthorizationToken } from "../../api";
 
 // helpers
 import {
@@ -28,7 +27,6 @@ interface UserData {
   type: string;
 }
 
-const api = new APICore();
 
 /**
  * Login the user
@@ -42,14 +40,13 @@ function* login({
   try {
     const response = yield call(loginApi, { username, password });
     const user = response.data;
-    // NOTE - You can change this according to response format from your api
-    api.setLoggedInUser(user);
-    setAuthorization(user["token"]);
+    localStorage.setItem('accessToken', user["accessToken"])
+    setAuthorizationToken(user["accessToken"]);
     yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, user));
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
-    api.setLoggedInUser(null);
-    setAuthorization(null);
+    localStorage.setItem('accessToken', "")
+    setAuthorizationToken(null);
   }
 }
 
@@ -59,8 +56,7 @@ function* login({
 function* logout(): SagaIterator {
   try {
     yield call(logoutApi);
-    api.setLoggedInUser(null);
-    setAuthorization(null);
+    setAuthorizationToken(null);
     yield put(authApiResponseSuccess(AuthActionTypes.LOGOUT_USER, {}));
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.LOGOUT_USER, error));
@@ -73,13 +69,11 @@ function* signup({
   try {
     const response = yield call(signupApi, { fullname, email, password });
     const user = response.data;
-    // api.setLoggedInUser(user);
-    // setAuthorization(user['token']);
+    // setAuthorizationToken(user['accessToken']);
     yield put(authApiResponseSuccess(AuthActionTypes.SIGNUP_USER, user));
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.SIGNUP_USER, error));
-    api.setLoggedInUser(null);
-    setAuthorization(null);
+    setAuthorizationToken(null);
   }
 }
 
