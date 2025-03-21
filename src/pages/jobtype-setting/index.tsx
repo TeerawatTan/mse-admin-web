@@ -12,70 +12,44 @@ const JobTypePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobType | null>(null);
   const [jobName, setJobName] = useState("");
-
-  useEffect(() => {
-    fetchJobTypes();
-  }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = jobTypes.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(jobTypes.length / itemsPerPage);
 
   const fetchJobTypes = async () => {
     try {
-      const response = await api.get(`/MasterJobType`)
-      if (!response.data) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
+      const response = await api.get(`/MasterJobType`);
+      if (!response.data) throw new Error(`Error ${response.status}`);
       const data: JobType[] = await response.data;
       setJobTypes(data);
     } catch (error) {
-      console.error("Fetch API Error:", error);
+      console.error("Fetch error:", error);
     }
   };
+
   const addJobType = async (name: string) => {
     try {
-      const response = await api.post(`/MasterJobType`, { name })
+      const response = await api.post(`/MasterJobType`, { name });
       if (!response.data) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
-      const newJobType = await response.data();
+      const newJobType = await response.data;
       setJobTypes((prevJobTypes) => [...prevJobTypes, newJobType]);
       await fetchJobTypes();
     } catch (error) {
       console.error("Fetch API Error:", error);
     }
   };
-
-  const openModal = (jobType?: JobType) => {
-    setEditingJob(jobType || null);
-    setJobName(jobType?.name || "");
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setEditingJob(null);
-    setJobName("");
-  };
-
-  const handleSave = async () => {
-    if (!jobName.trim()) {
-      Swal.fire("Error", "Job type name is required", "error");
-      return;
-    }
-
-    if (editingJob) {
-      await handleEdit();
-      Swal.fire("Success", "Job type updated successfully", "success");
-    } else {
-      await addJobType(jobName);
-      Swal.fire("Success", "Job type added successfully", "success");
-    }
-
-    closeModal();
-  };
   const handleEdit = async () => {
     if (!editingJob) return;
 
     try {
-      const response = await api.patch(`/MasterJobType/${editingJob.id}`, { name: jobName })
+      const response = await api.patch(`/MasterJobType/${editingJob.id}`, {
+        name: jobName,
+      });
 
       if (response.data) {
         const updatedJob = response.data;
@@ -103,7 +77,7 @@ const JobTypePage: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    Swal.fire({
+    const confirm = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -111,28 +85,56 @@ const JobTypePage: React.FC = () => {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await api.delete(`/MasterJobType/${id}`)
-          if (res.data) {
-            setJobTypes(jobTypes.filter((jt) => jt.id !== id));
-            Swal.fire("Deleted!", "The job type has been deleted.", "success");
-          } else {
-            const errorData = await res.data;
-            Swal.fire(
-              "Error!",
-              errorData.message || "Failed to delete job type.",
-              "error"
-            );
-          }
-        } catch (error) {
-          Swal.fire("Error!", "Something went wrong while deleting.", "error");
-          console.error("Delete error:", error);
-        }
-      }
     });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const res = await api.delete(`/MasterJobType/${id}`);
+
+      if (!res.data) throw new Error(`Error ${res.status}`);
+
+      await fetchJobTypes();
+      Swal.fire("Deleted!", "The job type has been deleted.", "success");
+    } catch (error) {
+      console.error("Delete error:", error);
+      Swal.fire("Error!", "Failed to delete job type.", "error");
+    }
   };
+
+  const handleSave = async () => {
+    if (!jobName.trim()) {
+      Swal.fire("Error", "Job type name is required", "error");
+      return;
+    }
+
+    if (editingJob) {
+      await handleEdit();
+      Swal.fire("Success", "Job type updated successfully", "success");
+    } else {
+      await addJobType(jobName);
+      Swal.fire("Success", "Job type added successfully", "success");
+    }
+
+    closeModal();
+  };
+
+  const openModal = (jobType?: JobType) => {
+    setEditingJob(jobType || null);
+    setJobName(jobType?.name || "");
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setEditingJob(null);
+    setJobName("");
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    fetchJobTypes();
+  }, []);
+
   return (
     <>
       <PageBreadcrumb
@@ -142,82 +144,97 @@ const JobTypePage: React.FC = () => {
       />
 
       <div className="card">
-        <div className="card-header">
-          <div className="flex justify-between items-center">
-            <h4 className="card-title">Job Type List</h4>
-            <div className="flex justify-end">
+        <div className="card-header flex justify-between items-center">
+          <h4 className="card-title">Job Type List</h4>
+          <button
+            className="text-primary hover:text-sky-700"
+            onClick={() => openModal()}
+          >
+            + Add Job Type
+          </button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  No
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  Job Type
+                </th>
+                <th className="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {currentItems.map((jt, idx) => (
+                <tr key={jt.id}>
+                  <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                    {idx + 1}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                    {jt.name}
+                  </td>
+                  <td className="px-6 py-4 text-end text-sm font-medium">
+                    <button
+                      className="text-primary hover:text-sky-700"
+                      onClick={() => openModal(jt)}
+                    >
+                      Edit
+                    </button>
+                    <span> | </span>
+                    <button
+                      className="text-primary hover:text-sky-700"
+                      onClick={() => handleDelete(jt.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="flex justify-center items-center mt-6 py-4 space-x-2 bg-white shadow-md rounded-lg">
+            <button
+              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50 transition-all"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Prev
+            </button>
+
+            {[...Array(totalPages)].map((_, i) => (
               <button
-                className="text-primary hover:text-sky-700"
-                onClick={() => openModal()}
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-4 py-2 rounded-lg transition-all ${
+                  currentPage === i + 1
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
               >
-                + Add Job Type
+                {i + 1}
               </button>
-            </div>
+            ))}
+
+            <button
+              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50 transition-all"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
           </div>
         </div>
-        <div>
-          <div className="overflow-x-auto">
-            <div className="min-w-full inline-block align-middle">
-              <div className="overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead>
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
-                      >
-                        No
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
-                      >
-                        Job Type
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase"
-                      >
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {(jobTypes || []).map((jt, idx) => {
-                      return (
-                        <tr key={idx}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                            {idx + 1}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                            {jt.name}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                            <button
-                              className="text-primary hover:text-sky-700"
-                              onClick={() => openModal(jt)}
-                            >
-                              Edit
-                            </button>
-                            <span> | </span>
-                            <button
-                              className="text-primary hover:text-sky-700"
-                              onClick={() => handleDelete(jt.id)}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+
+        {/* Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
               <h3 className="text-xl font-semibold mb-4 text-gray-800">
                 {editingJob ? "Edit Job Type" : "Add Job Type"}
@@ -231,13 +248,13 @@ const JobTypePage: React.FC = () => {
               />
               <div className="flex justify-end space-x-2">
                 <button
-                  className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-300"
+                  className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
                   onClick={closeModal}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                   onClick={handleSave}
                 >
                   Save
