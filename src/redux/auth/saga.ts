@@ -41,11 +41,16 @@ function* login({
     const response = yield call(loginApi, { username, password });
     const user = response.data;
     localStorage.setItem('accessToken', user["accessToken"])
+    localStorage.setItem('expireDate', user["expireDate"])
+    localStorage.setItem('expiresIn', user["expiresIn"])
+    localStorage.setItem('roleID', user["roleID"])
+    localStorage.setItem('userID', user["userID"])
+    localStorage.setItem('userName', user["userName"])
     setAuthorizationToken(user["accessToken"]);
     yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, user));
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
-    localStorage.setItem('accessToken', "")
+    localStorage.clear()
     setAuthorizationToken(null);
   }
 }
@@ -55,8 +60,9 @@ function* login({
  */
 function* logout(): SagaIterator {
   try {
-    yield call(logoutApi);
+    // yield call(logoutApi);
     setAuthorizationToken(null);
+    localStorage.clear()
     yield put(authApiResponseSuccess(AuthActionTypes.LOGOUT_USER, {}));
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.LOGOUT_USER, error));

@@ -5,17 +5,19 @@ import _ from "lodash";
 // Map to store cancel tokens
 const cancelTokens = new Map();
 
-// Create an axios instance with the specified base URL and headers
-const mainAxios = axios.create({
+const apiConfig = {
   baseURL:
-    import.meta.env.PROD ? import.meta.env.VITE_APP_API_URL : import.meta.env.VITE_APP_API_DEV_URL,
+    import.meta.env.PROD ?
+      import.meta.env.VITE_APP_API_URL : import.meta.env.VITE_APP_API_DEV_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
     "ngrok-skip-browser-warning": null,
   },
-});
+};
 
+// Create an axios instance with the specified base URL and headers
+const mainAxios = axios.create(apiConfig);
 // Function to generate a unique request key
 const generateRequestKey = (config: AxiosRequestConfig) => {
   return `${config.method}-${config.url}-${JSON.stringify(

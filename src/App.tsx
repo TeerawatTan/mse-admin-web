@@ -2,8 +2,6 @@ import React from 'react';
 
 import AllRoutes from "./routes/Routes";
 
-import { configureFakeBackend } from './helpers';
-
 import "nouislider/distribute/nouislider.css";
 
 import "./assets/scss/app.scss";
