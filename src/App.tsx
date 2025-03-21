@@ -11,7 +11,7 @@ import "./assets/scss/icons.scss";
 import { setAuthorizationToken } from './api';
 
 // configure fake backend
-configureFakeBackend()
+// configureFakeBackend()
 
 const App = () => {
 
