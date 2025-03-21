@@ -19,11 +19,12 @@ const JobTypePage: React.FC = () => {
 
   const fetchJobTypes = async () => {
     try {
-      const response = await fetch("/api/jobTypes");
-      if (!response.ok) {
+      const response = await api.get(`/api/jobTypes`)
+
+      if (!response.data) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
-      const data: JobType[] = await response.json();
+      const data: JobType[] = await response.data;
       setJobTypes(data);
     } catch (error) {
       console.error("Fetch API Error:", error);
