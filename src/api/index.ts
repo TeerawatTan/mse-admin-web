@@ -73,7 +73,7 @@ mainAxios.interceptors.response.use(
       cancelTokens.delete(requestKey);
     }
 
-    if (originalRequest?.url === "/api/login") {
+    if (originalRequest?.url === "/Auth/SignIn") {
       return Promise.reject(error instanceof Error ? error : new Error(error));
     }
     // // manage status api

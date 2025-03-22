@@ -129,7 +129,7 @@ const CloningList = () => {
             className="flex flex-col gap-3"
             list={items2}
             setList={setItems2}
-            ort={true}
+            sort={true}
           >
 
             {(items2 || []).map((item, idx) => (
