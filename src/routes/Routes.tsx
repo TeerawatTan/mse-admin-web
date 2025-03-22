@@ -10,7 +10,6 @@ import DefaultLayout from "../layouts/Default";
 import VerticalLayout from "../layouts/Vertical";
 
 import { authProtectedFlattenRoutes, publicProtectedFlattenRoutes } from ".";
-import api from "../api";
 
 const AllRoutes = (props: RouteProps) => {
   const { Layout } = useSelector((state: RootState) => ({

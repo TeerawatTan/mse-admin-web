@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "homepage": "http://localhost/Admin/",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",

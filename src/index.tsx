@@ -17,7 +17,7 @@ if (container) {
   root.render(
     <Provider store={store}>
       <React.Fragment>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter basename={'/Admin'}>
           <App />
         </BrowserRouter>
       </React.Fragment>
