@@ -16,11 +16,11 @@ const MENU_ITEMS: MenuItemTypes[] = [
     isTitle: true,
   },
   {
-    key: 'dashboard',
-    label: 'Dashboard',
+    key: 'home',
+    label: 'Home',
     isTitle: false,
     icon: 'mgc_home_3_line',
-    url: '/dashboard'
+    url: '/home'
   },
   {
     key: 'workplace',

@@ -9,7 +9,7 @@ import { logoutUser, resetAuth } from '../redux/actions';
 import { useSelector } from 'react-redux';
 
 interface ProfileDropDownProps {
-  menuItems: Array<ProfileMenuItem>;
+  menuItems?: Array<ProfileMenuItem>;
   profiliePic?: string;
 }
 
@@ -53,7 +53,7 @@ const ProfileDropDown = ({ menuItems, profiliePic }: ProfileDropDownProps) => {
             </React.Fragment>
           )
         })}
-        <hr className="my-2 -mx-2 border-gray-200 dark:border-gray-700" />
+        {/* <hr className="my-2 -mx-2 border-gray-200 dark:border-gray-700" /> */}
         <button className="w-full flex items-center py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" onClick={handleLogout}>
           <i className='mgc_exit_line me-2' />
           <span>Logout</span>

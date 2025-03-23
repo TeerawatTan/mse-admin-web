@@ -7,7 +7,7 @@ import { NotificationItem } from '../layouts/Topbar';
 import { PopoverLayout } from './HeadlessUI';
 
 interface NotificationDropDownProps {
-  notifications: Array<NotificationItem>;
+  notifications?: Array<NotificationItem>;
 }
 
 const NotificationDropdown = ({ notifications }: NotificationDropDownProps) => {
@@ -85,7 +85,7 @@ const NotificationDropdown = ({ notifications }: NotificationDropDownProps) => {
               </div>
             </div>
 
-            <SimpleBar className="p-4 h-80">
+            {/* <SimpleBar className="p-4 h-80">
               {(notifications || []).map((notification, idx) => {
                 const todayDate = new Date().getDate();
                 currentDate = notification.createdAt.getDate();
@@ -155,7 +155,7 @@ const NotificationDropdown = ({ notifications }: NotificationDropDownProps) => {
                   )
                 }
               })}
-            </SimpleBar>
+            </SimpleBar> */}
             <a href="" className="p-2 border-t border-dashed border-gray-200 dark:border-gray-700 block text-center text-primary underline font-semibold">
               View All
             </a>

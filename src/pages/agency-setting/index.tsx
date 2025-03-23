@@ -10,8 +10,8 @@ interface Agency {
 const AgencyPage: React.FC = () => {
   const [agency, setAgency] = useState<Agency[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingJob, setEditingJob] = useState<Agency | null>(null);
-  const [jobName, setJobName] = useState("");
+  const [editingAgency, setEditingAgency] = useState<Agency | null>(null);
+  const [agencyName, setAgenyName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -44,11 +44,11 @@ const AgencyPage: React.FC = () => {
     }
   };
   const handleEdit = async () => {
-    if (!editingJob) return;
+    if (!editingAgency) return;
 
     try {
-      const response = await api.patch(`/MasterAgency/${editingJob.id}`, {
-        name: jobName,
+      const response = await api.patch(`/MasterAgency/${editingAgency.id}`, {
+        name: agencyName,
       });
 
       if (response.data) {
@@ -56,7 +56,7 @@ const AgencyPage: React.FC = () => {
 
         setAgency((prev) =>
           prev.map((jt) =>
-            jt.id === editingJob.id ? { ...jt, name: jobName } : jt
+            jt.id === editingAgency.id ? { ...jt, name: agencyName } : jt
           )
         );
 
@@ -103,16 +103,16 @@ const AgencyPage: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!jobName.trim()) {
+    if (!agencyName.trim()) {
       Swal.fire("Error", "Job type name is required", "error");
       return;
     }
 
-    if (editingJob) {
+    if (editingAgency) {
       await handleEdit();
       Swal.fire("Success", "Job type updated successfully", "success");
     } else {
-      await addAgency(jobName);
+      await addAgency(agencyName);
       Swal.fire("Success", "Job type added successfully", "success");
     }
 
@@ -120,14 +120,14 @@ const AgencyPage: React.FC = () => {
   };
 
   const openModal = (Agency?: Agency) => {
-    setEditingJob(Agency || null);
-    setJobName(Agency?.name || "");
+    setEditingAgency(Agency || null);
+    setAgenyName(Agency?.name || "");
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setEditingJob(null);
-    setJobName("");
+    setEditingAgency(null);
+    setAgenyName("");
     setIsModalOpen(false);
   };
 
@@ -210,11 +210,10 @@ const AgencyPage: React.FC = () => {
               <button
                 key={i}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`px-4 py-2 rounded-lg transition-all ${
-                  currentPage === i + 1
+                className={`px-4 py-2 rounded-lg transition-all ${currentPage === i + 1
                     ? "bg-blue-600 text-white shadow-md"
                     : "bg-gray-200 hover:bg-gray-300"
-                }`}
+                  }`}
               >
                 {i + 1}
               </button>
@@ -235,12 +234,12 @@ const AgencyPage: React.FC = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
               <h3 className="text-xl font-semibold mb-4 text-gray-800">
-                {editingJob ? "Edit Job Type" : "Add Job Type"}
+                {editingAgency ? "Edit Job Type" : "Add Job Type"}
               </h3>
               <input
                 type="text"
-                value={jobName}
-                onChange={(e) => setJobName(e.target.value)}
+                value={agencyName}
+                onChange={(e) => setAgenyName(e.target.value)}
                 className="border w-full p-3 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter job type name"
               />

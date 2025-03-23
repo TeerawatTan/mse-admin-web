@@ -11,9 +11,7 @@ import logoDark from '../assets/images/logo-dark.png'
 import logoSm from '../assets/images/logo-sm.png'
 
 // avatar
-import avatar2 from '../assets/images/users/avatar-2.jpg'
-import avatar4 from '../assets/images/users/avatar-4.jpg'
-import profilePic from '../assets/images/users/avatar-6.jpg'
+import profilePic from '../assets/images/users/default-avatar-profile-icon.jpg'
 import { TopBarSearch, LanguageDropdown, MaximizeScreen, NotificationDropdown, ProfileDropDown, } from "../components";
 
 export interface NotificationItem {
@@ -36,65 +34,65 @@ export type ProfileMenuItem = {
  * notification items
  */
 const notifications: NotificationItem[] = [
-  {
-    id: 1,
-    text: 'Datacorp',
-    subText: 'Caleb Flakelar commented on Admin',
-    icon: 'mgc_message_3_line text-lg',
-    bgColor: 'primary',
-    createdAt: subtractHours(new Date(), 1),
-  },
-  {
-    id: 2,
-    text: 'Admin',
-    subText: 'New user registered',
-    icon: 'mgc_user_add_line text-lg',
-    bgColor: 'info',
-    createdAt: subtractHours(new Date(), 60),
-  },
-  {
-    id: 3,
-    text: 'Cristina Pride',
-    subText: 'Hi, How are you? What about our next meeting',
-    avatar: avatar2,
-    createdAt: subtractHours(new Date(), 1440),
-  },
-  {
-    id: 4,
-    text: 'Datacorp',
-    subText: 'Caleb Flakelar commented on Admin',
-    icon: 'mgc_message_1_line text-lg',
-    bgColor: 'primary',
-    createdAt: subtractHours(new Date(), 2880),
-  },
-  {
-    id: 5,
-    text: 'Karen Robinson',
-    subText: 'Wow ! this admin looks good and awesome design',
-    avatar: avatar4,
-    createdAt: subtractHours(new Date(), 2880),
-  },
+  // {
+  //   id: 1,
+  //   text: 'Datacorp',
+  //   subText: 'Caleb Flakelar commented on Admin',
+  //   icon: 'mgc_message_3_line text-lg',
+  //   bgColor: 'primary',
+  //   createdAt: subtractHours(new Date(), 1),
+  // },
+  // {
+  //   id: 2,
+  //   text: 'Admin',
+  //   subText: 'New user registered',
+  //   icon: 'mgc_user_add_line text-lg',
+  //   bgColor: 'info',
+  //   createdAt: subtractHours(new Date(), 60),
+  // },
+  // {
+  //   id: 3,
+  //   text: 'Cristina Pride',
+  //   subText: 'Hi, How are you? What about our next meeting',
+  //   avatar: avatar2,
+  //   createdAt: subtractHours(new Date(), 1440),
+  // },
+  // {
+  //   id: 4,
+  //   text: 'Datacorp',
+  //   subText: 'Caleb Flakelar commented on Admin',
+  //   icon: 'mgc_message_1_line text-lg',
+  //   bgColor: 'primary',
+  //   createdAt: subtractHours(new Date(), 2880),
+  // },
+  // {
+  //   id: 5,
+  //   text: 'Karen Robinson',
+  //   subText: 'Wow ! this admin looks good and awesome design',
+  //   avatar: avatar4,
+  //   createdAt: subtractHours(new Date(), 2880),
+  // },
 ]
 
 /**
  * profile menu items
  */
 const profileMenus: ProfileMenuItem[] = [
-  {
-    label: 'Gallery',
-    icon: 'mgc_pic_2_line me-2',
-    redirectTo: '/pages/gallery',
-  },
-  {
-    label: 'Kanban',
-    icon: 'mgc_task_2_line me-2',
-    redirectTo: '/apps/kanban',
-  },
-  {
-    label: 'Lock Screen',
-    icon: 'mgc_lock_line me-2',
-    redirectTo: '/auth/lock-screen',
-  },
+  // {
+  //   label: 'Gallery',
+  //   icon: 'mgc_pic_2_line me-2',
+  //   redirectTo: '/pages/gallery',
+  // },
+  // {
+  //   label: 'Kanban',
+  //   icon: 'mgc_task_2_line me-2',
+  //   redirectTo: '/apps/kanban',
+  // },
+  // {
+  //   label: 'Lock Screen',
+  //   icon: 'mgc_lock_line me-2',
+  //   redirectTo: '/auth/lock-screen',
+  // },
 ];
 
 /**
@@ -221,16 +219,14 @@ const Topbar = () => {
           </div>
         </Link>
 
+      <div className="p-2 me-auto"></div>
+        {/* <TopBarSearch /> */}
 
-        <TopBarSearch />
-
-        <LanguageDropdown />
-
-        <MaximizeScreen />
+        {/* <LanguageDropdown /> */}
 
         <NotificationDropdown notifications={notifications} />
 
-        <div className="flex">
+        {/* <div className="flex">
           <button
             id="light-dark-mode"
             type="button"
@@ -242,11 +238,11 @@ const Topbar = () => {
               <i className="mgc_moon_line text-2xl"></i>
             </span>
           </button>
-        </div>
+        </div> */}
 
         <ProfileDropDown
           profiliePic={profilePic}
-          menuItems={profileMenus}
+          // menuItems={profileMenus}
         />
 
       </header>

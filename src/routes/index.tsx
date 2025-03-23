@@ -9,19 +9,21 @@ import PrivateRoute from "./PrivateRoute";
 
 // auth
 const Login = React.lazy(() => import("../pages/auth/Login"));
-const Register = React.lazy(() => import("../pages/auth/Register"));
-const RecoverPassword = React.lazy(() => import("../pages/auth/RecoverPassword"));
-const LockScreen = React.lazy(() => import("../pages/auth/LockScreen"));
+// const Register = React.lazy(() => import("../pages/auth/Register"));
+// const RecoverPassword = React.lazy(() => import("../pages/auth/RecoverPassword"));
+// const LockScreen = React.lazy(() => import("../pages/auth/LockScreen"));
 
 // dashboard 
-const Dashboard = React.lazy(() => import("../pages/dashboard/"));
+// const Dashboard = React.lazy(() => import("../pages/dashboard/"));
+
+// home
+const Home = React.lazy(() => import("../pages/home/"));
 
 // Work Place
 const Workplace = React.lazy(() => import("../pages/workplace-setting/"));
 
 // Agency
 const Agency = React.lazy(() => import("../pages/agency-setting/"));
-const AgencyEdit = React.lazy(() => import("../pages/agency-setting/[id]"));
 
 // JobType
 const JobType = React.lazy(() => import("../pages/jobtype-setting/"));
@@ -52,20 +54,20 @@ export interface RoutesProps {
 // dashboards
 const dashboardRoutes: RoutesProps = {
   path: "/home",
-  name: "Dashboards",
+  name: "Home",
   icon: "home",
   header: "Navigation",
   children: [
     {
       path: "/",
       name: "Root",
-      element: <Navigate to='/dashboard' />,
+      element: <Navigate to='/home' />,
       route: PrivateRoute,
     },
     {
-      path: '/dashboard',
-      name: "Dashboard",
-      element: <Dashboard />,
+      path: '/home',
+      name: "Home",
+      element: <Home />,
       route: PrivateRoute,
     },
     {
@@ -78,12 +80,6 @@ const dashboardRoutes: RoutesProps = {
       path: '/agency',
       name: "Agency",
       element: <Agency />,
-      route: PrivateRoute,
-    },
-    {
-      path: 'agency/:id',
-      name: "agency-edit",
-      element: <AgencyEdit />,
       route: PrivateRoute,
     },
     {
@@ -109,24 +105,24 @@ const authRoutes: RoutesProps[] = [
     element: <Login />,
     route: Route,
   },
-  {
-    path: "/auth/register",
-    name: "Register",
-    element: <Register />,
-    route: Route,
-  },
-  {
-    path: "/auth/recover-password",
-    name: "Recover Password",
-    element: <RecoverPassword />,
-    route: Route,
-  },
-  {
-    path: "/auth/lock-screen",
-    name: "Lock Screen",
-    element: <LockScreen />,
-    route: Route,
-  },
+  // {
+  //   path: "/auth/register",
+  //   name: "Register",
+  //   element: <Register />,
+  //   route: Route,
+  // },
+  // {
+  //   path: "/auth/recover-password",
+  //   name: "Recover Password",
+  //   element: <RecoverPassword />,
+  //   route: Route,
+  // },
+  // {
+  //   path: "/auth/lock-screen",
+  //   name: "Lock Screen",
+  //   element: <LockScreen />,
+  //   route: Route,
+  // },
 ];
 
 // public routes
