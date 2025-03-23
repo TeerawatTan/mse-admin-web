@@ -7,7 +7,7 @@ import { NotificationItem } from '../layouts/Topbar';
 import { PopoverLayout } from './HeadlessUI';
 
 interface NotificationDropDownProps {
-  notifications: Array<NotificationItem>;
+  notifications?: Array<NotificationItem>;
 }
 
 const NotificationDropdown = ({ notifications }: NotificationDropDownProps) => {
