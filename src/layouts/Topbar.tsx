@@ -80,21 +80,21 @@ const notifications: NotificationItem[] = [
  * profile menu items
  */
 const profileMenus: ProfileMenuItem[] = [
-  {
-    label: 'Gallery',
-    icon: 'mgc_pic_2_line me-2',
-    redirectTo: '/pages/gallery',
-  },
-  {
-    label: 'Kanban',
-    icon: 'mgc_task_2_line me-2',
-    redirectTo: '/apps/kanban',
-  },
-  {
-    label: 'Lock Screen',
-    icon: 'mgc_lock_line me-2',
-    redirectTo: '/auth/lock-screen',
-  },
+  // {
+  //   label: 'Gallery',
+  //   icon: 'mgc_pic_2_line me-2',
+  //   redirectTo: '/pages/gallery',
+  // },
+  // {
+  //   label: 'Kanban',
+  //   icon: 'mgc_task_2_line me-2',
+  //   redirectTo: '/apps/kanban',
+  // },
+  // {
+  //   label: 'Lock Screen',
+  //   icon: 'mgc_lock_line me-2',
+  //   redirectTo: '/auth/lock-screen',
+  // },
 ];
 
 /**
@@ -221,16 +221,14 @@ const Topbar = () => {
           </div>
         </Link>
 
+      <div className="p-2 me-auto"></div>
+        {/* <TopBarSearch /> */}
 
-        <TopBarSearch />
-
-        <LanguageDropdown />
-
-        <MaximizeScreen />
+        {/* <LanguageDropdown /> */}
 
         <NotificationDropdown notifications={notifications} />
 
-        <div className="flex">
+        {/* <div className="flex">
           <button
             id="light-dark-mode"
             type="button"
@@ -242,11 +240,11 @@ const Topbar = () => {
               <i className="mgc_moon_line text-2xl"></i>
             </span>
           </button>
-        </div>
+        </div> */}
 
         <ProfileDropDown
           profiliePic={profilePic}
-          menuItems={profileMenus}
+          // menuItems={profileMenus}
         />
 
       </header>
