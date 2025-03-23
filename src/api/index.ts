@@ -59,7 +59,7 @@ mainAxios.interceptors.response.use(
     cancelTokens.delete(requestKey);
     return response;
   },
-  (error) => {
+  async (error) => {
     // Don't handle cancellation errors as actual errors
     if (axios.isCancel(error)) {
       return Promise.reject(error);
@@ -76,7 +76,13 @@ mainAxios.interceptors.response.use(
     if (originalRequest?.url === "/Auth/SignIn") {
       return Promise.reject(error instanceof Error ? error : new Error(error));
     }
-    // // manage status api
+    // manage status api
+    if (error.response?.status === 401) {
+      originalRequest._retry = true;
+      await refreshAccessToken();
+      return mainAxios(originalRequest);
+    }
+
     // if (
     //   error.response?.status === 401 &&
     //   originalRequest?.url !== "/api/verify_otp"
@@ -139,3 +145,25 @@ export const setAuthorizationToken = (token: string | null) => {
     delete mainAxios.defaults.headers.common["Authorization"];
   }
 };
+
+// Refresh access token function
+export const refreshAccessToken = async (): Promise<void> => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) throw new Error('No access token available');
+    const response = await mainAxios.post('/Auth/RefreshToken');
+    const user = response.data;
+    // Store new access token
+    localStorage.setItem('accessToken', user["accessToken"])
+    localStorage.setItem('expireDate', user["expireDate"])
+    localStorage.setItem('expiresIn', user["expiresIn"])
+    localStorage.setItem('roleID', user["roleID"])
+    localStorage.setItem('userID', user["userID"])
+    localStorage.setItem('userName', user["userName"])
+    setAuthorizationToken(user["accessToken"]);
+  } catch (error) {
+    localStorage.clear();
+    window.location.href = "/login";
+  }
+};
+
