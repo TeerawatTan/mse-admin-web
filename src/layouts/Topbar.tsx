@@ -78,6 +78,11 @@ const notifications: NotificationItem[] = [
  * profile menu items
  */
 const profileMenus: ProfileMenuItem[] = [
+  {
+    label: 'Profile',
+    icon: 'mgc_user_1_line me-2',
+    redirectTo: '/profile',
+  },
   // {
   //   label: 'Gallery',
   //   icon: 'mgc_pic_2_line me-2',
@@ -219,7 +224,7 @@ const Topbar = () => {
           </div>
         </Link>
 
-      <div className="p-2 me-auto"></div>
+        <div className="p-2 me-auto"></div>
         {/* <TopBarSearch /> */}
 
         {/* <LanguageDropdown /> */}
@@ -242,7 +247,7 @@ const Topbar = () => {
 
         <ProfileDropDown
           profiliePic={profilePic}
-          // menuItems={profileMenus}
+          menuItems={profileMenus}
         />
 
       </header>

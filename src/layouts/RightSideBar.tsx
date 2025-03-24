@@ -1,9 +1,7 @@
-import { ScrollToTop, ThemeCustomizer } from "../components"
-import { useSelector } from "react-redux"
-import { RootState } from "../redux/store"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { ScrollToTop } from "../components"
 import { hideRightSidebar, showRightSidebar } from "../redux/actions"
-import { OffcanvasLayout } from "../components/HeadlessUI"
+import { RootState } from "../redux/store"
 
 const RightSideBar = () => {
   const dispatch = useDispatch();
@@ -26,7 +24,7 @@ const RightSideBar = () => {
     <>
       <ScrollToTop />
 
-      <div className="fixed end-0 bottom-20">
+      {/* <div className="fixed end-0 bottom-20">
         <button type="button" className="bg-white rounded-s-full shadow-lg p-2.5 ps-3 transition-all dark:bg-slate-800" onClick={handleRightSideBar}>
           <span className="sr-only">Setting</span>
           <span className="flex items-center justify-center animate-spin">
@@ -37,7 +35,7 @@ const RightSideBar = () => {
 
       <OffcanvasLayout open={isOpenRightSideBar} toggleOffcanvas={handleRightSideBar} sizeClassName="w-96 max-w-sm">
         <ThemeCustomizer handleRightSideBar={handleRightSideBar} />
-      </OffcanvasLayout>
+      </OffcanvasLayout> */}
     </>
   )
 }
