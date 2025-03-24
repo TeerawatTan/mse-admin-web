@@ -26,6 +26,9 @@ export default function MapChoiceToQuestionPage() {
     null
   );
   const [selectedChoiceId, setSelectedChoiceId] = useState<number | null>(null);
+  const [selectedChoiceNum, setSelectedChoiceNum] = useState<string>('');
+  const [groupChoices, setGroupChoices] = useState<Record<string, Choice[]>>({});
+
 
   const fetchQuestions = async () => {
     try {
@@ -36,10 +39,23 @@ export default function MapChoiceToQuestionPage() {
     }
   };
 
+  const groupByNums = (data: Choice[]): Record<string, Choice[]> => {
+    return data.reduce((acc, item) => {
+      if (!acc[item.choiceNum]) {
+        acc[item.choiceNum] = [];
+      }
+      acc[item.choiceNum].push(item);
+      return acc;
+    }, {} as Record<string, Choice[]>);
+  };
+
   const fetchChoices = async () => {
     try {
       const res = await api.get("/QuestionAndChoice/Choice");
-      setChoices(res.data);
+      const data: Choice[] = res.data;
+      setChoices(data);
+      const groupedData = groupByNums(data);
+      setGroupChoices(groupedData);
     } catch (err) {
       console.error("Failed to retrieve Choices", err);
     }
@@ -157,7 +173,11 @@ export default function MapChoiceToQuestionPage() {
                 </thead>
                 <tbody>
                   <tr className="border-t">
-                    <td className="px-4 py-2 align-top">1</td>
+                    <td className="px-4 py-2 align-top">
+                      <div className="font-medium mb-2 text-gray-800">
+                        {selectedQuestion.questionNum}
+                      </div>
+                    </td>
                     <td className="px-4 py-2">
                       <div className="font-medium mb-2 text-gray-800">
                         {selectedQuestion.questionName}
@@ -185,20 +205,37 @@ export default function MapChoiceToQuestionPage() {
                 <select
                   className="w-full border border-gray-300 p-2 rounded-md shadow-sm focus:ring focus:ring-blue-200"
                   value={
-                    selectedChoiceId !== null ? selectedChoiceId.toString() : ""
+                    selectedChoiceNum !== null ? selectedChoiceNum.toString() : ""
                   }
                   onChange={(e) => {
-                    const value = e.target.value;
-                    setSelectedChoiceId(value ? parseInt(value) : null);
+                    const value = e.target.value; // value of choiceNum
+                    const id = choices.find((c) => c.choiceNum === value)?.id; // get first choice of choiceNum
+                    setSelectedChoiceId(id ? id : null);
+                    setSelectedChoiceNum(value);
                   }}
                 >
                   <option value="">-- Select Choice --</option>
-                  {choices.map((c) => (
-                    <option key={c.id} value={c.id}>
+                  {/* {choices.map((c) => (
+                    <option key={c.id} value={c.choiceNum}>
                       ({c.choiceNum}) {c.choiceName}
+                    </option>
+                  ))} */}
+                  {Object.entries(groupChoices).map(([code, groups]) => (
+                    <option key={code} value={code}>
+                      {code}
                     </option>
                   ))}
                 </select>
+                <ul className="list-disc ml-5 mt-1 text-gray-700">
+                  {selectedChoiceNum ? (
+                    choices.filter((c) => c.choiceNum === selectedChoiceNum)).map((ch, idx) => (
+                      <li key={idx}>
+                        {ch.choiceName} ({ch.choiceNum})
+                      </li>
+                    )) : (
+                    <li className="italic text-gray-500">No Choice</li>
+                  )}
+                </ul>
               </div>
             </div>
           )}
