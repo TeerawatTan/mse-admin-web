@@ -20,6 +20,9 @@ const Login = React.lazy(() => import("../pages/auth/Login"));
 const Home = React.lazy(() => import("../pages/home/"));
 
 // Work Place
+const Profile = React.lazy(() => import("../pages/profile/"));
+
+// Work Place
 const Workplace = React.lazy(() => import("../pages/workplace-setting/"));
 
 // Agency
@@ -93,7 +96,13 @@ const dashboardRoutes: RoutesProps = {
       name: "QuestionAndChoice",
       element: <QuestionAndChoice />,
       route: PrivateRoute,
-    }
+    },
+    {
+      path: '/profile',
+      name: "Profile",
+      element: <Profile />,
+      route: PrivateRoute,
+    },
   ],
 };
 

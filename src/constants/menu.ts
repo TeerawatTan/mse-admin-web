@@ -26,28 +26,28 @@ const MENU_ITEMS: MenuItemTypes[] = [
     key: 'workplace',
     label: 'Work Place',
     isTitle: false,
-    icon: 'mgc_home_3_line',
+    icon: 'mgc_building_1_line',
     url: '/workplace'
   },
   {
     key: 'agency',
     label: 'Agency',
     isTitle: false,
-    icon: 'mgc_home_3_line',
+    icon: 'mgc_group_line',
     url: '/agency'
   },
   {
     key: 'jobtype',
     label: 'Job Type',
     isTitle: false,
-    icon: 'mgc_home_3_line',
+    icon: 'mgc_briefcase_line',
     url: '/jobtype'
   },
   {
     key: 'question-choice',
     label: 'Question And Choice',
     isTitle: false,
-    icon: 'mgc_home_3_line',
+    icon: 'mgc_question_line',
     url: '/question-choice'
   }
 ];
