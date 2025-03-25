@@ -77,15 +77,17 @@ mainAxios.interceptors.response.use(
       return Promise.reject(error instanceof Error ? error : new Error(error));
     }
     // manage status api
-    if (response) {
-      const originalRequest = config as any;
-      if (response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        await refreshAccessToken();
-        return mainAxios(originalRequest);
-      }
-    } else {
+
+    const originalRequest = config as any;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
       await refreshAccessToken();
+      return mainAxios(originalRequest);
+    }
+
+    if (error.response?.status === 403) {
+      localStorage.clear();
+      window.location.href = "/auth/login";
     }
 
     // if (
@@ -156,6 +158,15 @@ export const refreshAccessToken = async (): Promise<void> => {
   try {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) throw new Error('No access token available');
+
+    const expireDateTime = new Date(localStorage.getItem('expireDate')!);
+    const diffInMs: number = expireDateTime.getTime() - new Date().getTime();
+    const diffInMinutes: number = diffInMs / (1000 * 60);
+    if (diffInMinutes < 0) {
+      localStorage.clear();
+      window.location.href = "/auth/login";
+      return;
+    }
     const response = await mainAxios.post('/Auth/RefreshToken');
     const user = response.data;
     // Store new access token
@@ -168,7 +179,7 @@ export const refreshAccessToken = async (): Promise<void> => {
     setAuthorizationToken(user["accessToken"]);
   } catch (error) {
     localStorage.clear();
-    window.location.href = "/login";
+    window.location.href = "/auth/login";
   }
 };
 
