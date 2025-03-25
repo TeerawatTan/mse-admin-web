@@ -34,6 +34,10 @@ const JobType = React.lazy(() => import("../pages/jobtype-setting/"));
 // Map Question And Choice
 const QuestionAndChoice = React.lazy(() => import("../pages/question-choice-setting/"));
 
+const QuestionManage = React.lazy(() => import("../pages/question-choice-setting/question"));
+const ChoiceManage = React.lazy(() => import("../pages/question-choice-setting/choice"));
+const MapChoiceToQuestion = React.lazy(() => import("../pages/question-choice-setting/mapchoiceandquestion"));
+
 // error pages
 const Maintenance = React.lazy(() => import('../pages/error/Maintenance'));
 const ComingSoon = React.lazy(() => import('../pages/error/ComingSoon'));
@@ -95,6 +99,24 @@ const dashboardRoutes: RoutesProps = {
       path: '/question-choice',
       name: "QuestionAndChoice",
       element: <QuestionAndChoice />,
+      route: PrivateRoute,
+    },
+    {
+      path: '/question-choice-setting/question',
+      name: "ManageQuestion",
+      element: <QuestionManage />,
+      route: PrivateRoute,
+    },
+    {
+      path: '/question-choice-setting/choice',
+      name: "ManageChoice",
+      element: <ChoiceManage />,
+      route: PrivateRoute,
+    },
+    {
+      path: '/question-choice-setting/mapchoiceandquestion',
+      name: "MapChoiceAndQuestion",
+      element: <MapChoiceToQuestion />,
       route: PrivateRoute,
     },
     {

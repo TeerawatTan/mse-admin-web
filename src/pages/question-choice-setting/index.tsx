@@ -1,14 +1,17 @@
-import { useState } from "react";
-import QuestionList from "./components/QuestionList";
+// src/pages/question-choice-setting/index.tsx
+import React from "react";
+import { Link } from "react-router-dom";
+import QuestionAndChoiceList from "./components/QuestionAndChoiceList";
+import PageBreadcrumb from "../../components/PageBreadcrumb";
 
-const QuestionChoice = () => {
-  const [refresh, setRefresh] = useState(false);
-
+const QuestionChoiceSettingIndex = () => {
   return (
-    <div className="container mx-auto p-4">
-      <QuestionList key={refresh.toString()} />
-    </div>
+    <>
+        <div className="card-body">
+          <QuestionAndChoiceList />
+        </div>
+    </>
   );
 };
 
-export default QuestionChoice;
+export default QuestionChoiceSettingIndex;

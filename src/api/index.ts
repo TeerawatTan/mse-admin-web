@@ -59,28 +59,33 @@ mainAxios.interceptors.response.use(
     cancelTokens.delete(requestKey);
     return response;
   },
-  async (error) => {
+  async (error: AxiosError<any>) => {
     // Don't handle cancellation errors as actual errors
     if (axios.isCancel(error)) {
       return Promise.reject(error);
     }
 
-    const originalRequest = error.config;
+    const { response, config } = error;
 
     // Clean up the cancel token
-    if (originalRequest) {
-      const requestKey = generateRequestKey(originalRequest);
+    if (config) {
+      const requestKey = generateRequestKey(config);
       cancelTokens.delete(requestKey);
     }
 
-    if (originalRequest?.url === "/Auth/SignIn") {
+    if (config?.url === "/Auth/SignIn") {
       return Promise.reject(error instanceof Error ? error : new Error(error));
     }
     // manage status api
-    if (error.response?.status === 401) {
-      originalRequest._retry = true;
+    if (response) {
+      const originalRequest = config as any;
+      if (response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        await refreshAccessToken();
+        return mainAxios(originalRequest);
+      }
+    } else {
       await refreshAccessToken();
-      return mainAxios(originalRequest);
     }
 
     // if (
