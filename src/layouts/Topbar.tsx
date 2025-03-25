@@ -229,7 +229,6 @@ const Topbar = () => {
 
         {/* <LanguageDropdown /> */}
 
-        <NotificationDropdown notifications={notifications} />
 
         {/* <div className="flex">
           <button
@@ -245,10 +244,17 @@ const Topbar = () => {
           </button>
         </div> */}
 
+        <div>
+          <h3>{localStorage.getItem('userName')}</h3>
+        </div>
+          
         <ProfileDropDown
           profiliePic={profilePic}
           menuItems={profileMenus}
         />
+
+        <NotificationDropdown notifications={notifications} />
+
 
       </header>
     </>
