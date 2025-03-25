@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api";
 import PageBreadcrumb from "../../../components/PageBreadcrumb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Choice {
   choiceID: number;
@@ -18,19 +18,22 @@ interface Question {
 }
 
 export default function QuestionChoiceTable() {
+  const navigate = useNavigate();
   const [dataQCList, setDataQCList] = useState<Question[]>([]);
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 10;
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dataQCList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(dataQCList.length / itemsPerPage);
 
-  const fetchQuestionAndChoiceList = async () => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const fetchQuestionAndChoiceList = async (page: number) => {
     try {
-      const res = await api.get("/QuestionAndChoice/List");
-      setDataQCList(res.data);
+      const res = await api.get(
+        `/QuestionAndChoice/List?pageNumber=${page}&pageSize=${itemsPerPage}`
+      );
+      setDataQCList(res.data.items);
+      setTotalItems(res.data.totalItems);
     } catch (err) {
       console.error("Failed to get data", err);
     }
@@ -43,8 +46,8 @@ export default function QuestionChoiceTable() {
   };
 
   useEffect(() => {
-    fetchQuestionAndChoiceList();
-  }, []);
+    fetchQuestionAndChoiceList(currentPage);
+  }, [currentPage]);
 
   return (
     <>
@@ -59,17 +62,13 @@ export default function QuestionChoiceTable() {
           <div className="space-x-2">
             <Link to="/question-choice-setting/question">
               <button className="text-primary hover:text-sky-700">
-                | + Add Question |
+                + Add Question
               </button>
             </Link>
+            <span> | </span>
             <Link to="/question-choice-setting/choice">
               <button className="text-primary hover:text-sky-700">
-                | + Add Choice |
-              </button>
-            </Link>
-            <Link to="/question-choice-setting/mapchoiceandquestion">
-              <button className="text-primary hover:text-sky-700">
-                | + Map ChoiceToQuestion |
+                + Add Choice
               </button>
             </Link>
           </div>
@@ -79,22 +78,28 @@ export default function QuestionChoiceTable() {
           <thead>
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                No
+                ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Question Number
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Question
               </th>
               <th className="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">
-                Choices
+                Action
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {currentItems.map((q, index) => (
+            {dataQCList.map((q, index) => (
               <React.Fragment key={q.questionID}>
                 <tr>
                   <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                    {(currentPage - 1) * itemsPerPage + index + 1}
+                    {q.questionID}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-center text-gray-800 dark:text-gray-200">
+                    {q.questionNum}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
                     {q.questionName}
@@ -106,12 +111,21 @@ export default function QuestionChoiceTable() {
                     >
                       {expandedRows.includes(q.questionID)
                         ? "🔼 Hide"
-                        : "🔽 View Options"}
+                        : "🔽 View"}
+                    </button>
+                    <span> | </span>
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/question-choice-setting/mapchoiceandquestion?questionNum=${q.questionNum}`
+                        )
+                      }
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      🔗 Map Choice
                     </button>
                   </td>
                 </tr>
-
-                {/* แถวแสดงตัวเลือกเมื่อกดดู */}
                 {expandedRows.includes(q.questionID) && (
                   <tr key={`choices-${q.questionID}`}>
                     <td
