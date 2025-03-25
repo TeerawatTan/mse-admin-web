@@ -77,16 +77,16 @@ export default function QuestionChoiceTable() {
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase w-24">
                 ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Question Number
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase w-24">
+                No
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Question
               </th>
-              <th className="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase w-64">
                 Action
               </th>
             </tr>
@@ -95,16 +95,16 @@ export default function QuestionChoiceTable() {
             {dataQCList.map((q, index) => (
               <React.Fragment key={q.questionID}>
                 <tr>
-                  <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                  <td className="px-6 py-4 text-sm text-center text-gray-800 dark:text-gray-200 w-24">
                     {q.questionID}
                   </td>
-                  <td className="px-6 py-4 text-sm text-center text-gray-800 dark:text-gray-200">
+                  <td className="px-6 py-4 text-sm text-center text-center text-gray-800 dark:text-gray-200 w-24">
                     {q.questionNum}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                  <td className="px-6 py-4 text-sm text-left text-gray-800 dark:text-gray-200">
                     {q.questionName}
                   </td>
-                  <td className="px-6 py-4 text-end text-sm">
+                  <td className="px-6 py-4 text-end text-sm text-center w-64">
                     <button
                       onClick={() => toggleRow(q.questionID)}
                       className="text-blue-600 hover:text-blue-800"

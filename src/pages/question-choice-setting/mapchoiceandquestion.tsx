@@ -113,7 +113,7 @@ export default function MapChoiceToQuestionPage() {
       <PageBreadcrumb
         title="Map Choice To Question"
         name="Map Choice To Question"
-        breadCrumbItems={["Menu", "Map Choice To Question"]}
+        breadCrumbItems={["Menu", "List", "Map Choice To Question"]}
       />
 
       <div className="card shadow-lg p-6 max-w-4xl mx-auto bg-white">
